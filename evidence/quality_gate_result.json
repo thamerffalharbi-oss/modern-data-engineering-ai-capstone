@@ -1,0 +1,24 @@
+{
+  "checked_at": "2026-09-10T14:35:00.584964+00:00",
+  "success": false,
+  "expectations_evaluated": 14,
+  "expectations_passed": 13,
+  "expectations_failed": 1,
+  "success_percent": 92.86,
+  "gold_rows": 3,
+  "max_anomaly_rate_allowed": 0.6,
+  "observed_max_anomaly_rate": 0.75,
+  "failed_expectations": [
+    {
+      "expectation": "expect_column_values_to_be_between",
+      "column": "anomaly_rate",
+      "observed_value": null,
+      "unexpected_count": 3,
+      "partial_unexpected_list": [
+        0.75,
+        0.75,
+        0.75
+      ]
+    }
+  ]
+}

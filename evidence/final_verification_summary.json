@@ -1,0 +1,119 @@
+{
+  "project": "SDAIA Academy Modern Data Engineering Capstone",
+  "verified_at": "2026-09-10",
+  "pipeline_stages": {
+    "ingestion": {
+      "technology": "confluent-kafka (real Kafka broker at localhost:9092)",
+      "contract": "Pydantic MachineReading model",
+      "dlq": "Real Kafka topic capstone.dlq",
+      "verified": {
+        "valid_records_accepted": 12,
+        "invalid_records_rejected": 4,
+        "dlq_contains_rejections": true,
+        "rejection_reasons": [
+          "unknown machine_id",
+          "temperature outside plausible range",
+          "missing temperature_c field",
+          "invalid timestamp format"
+        ]
+      }
+    },
+    "lakehouse": {
+      "technology": "PySpark 3.5.6 + delta-spark 3.3.2",
+      "layers": ["Bronze", "Silver", "Gold"],
+      "bronze_rows": 12,
+      "silver_rows": 12,
+      "gold_rows": 3,
+      "gold_grain": "machine_id x reading_date",
+      "merge": {
+        "business_key": "reading_id",
+        "verified": "MERGE updates existing row in place; no duplicate created",
+        "evidence": "CNC_MILL_01-01 updated from 67.0 to 97.5"
+      },
+      "schema_enforcement": {
+        "verified": "Incompatible temperature_c (string vs double) rejected with DELTA_FAILED_TO_MERGE_FIELDS",
+        "rows_unchanged_after_rejection": true
+      }
+    },
+    "rag": {
+      "technology": "ChromaDB + BM25 + RRF + CrossEncoder",
+      "corpus_documents": 13,
+      "corpus_chunks": 29,
+      "questions_answered": 4,
+      "all_grounded_with_citations": true,
+      "retrieval_stages": ["dense", "keyword", "fused", "reranked"],
+      "answer_backend": "extractive (local, no API key)"
+    },
+    "quality_gate": {
+      "technology": "Great Expectations 0.18.22 (EphemeralDataContext)",
+      "suite": "capstone_gold_kpi_suite",
+      "expectations_total": 14,
+      "pass_path": {
+        "expectations_passed": 14,
+        "success_percent": 100.0,
+        "observed_max_anomaly_rate": 0.25
+      },
+      "fail_path": {
+        "expectations_passed": 13,
+        "expectations_failed": 1,
+        "failed_expectation": "expect_column_values_to_be_between on anomaly_rate",
+        "observed_max_anomaly_rate": 0.75,
+        "allowed_max_anomaly_rate": 0.60,
+        "exception": "QualityGateFailed"
+      }
+    },
+    "lineage": {
+      "technology": "openlineage-python 1.24.2 (FileTransport)",
+      "events_emitted": ["START", "COMPLETE", "FAIL"],
+      "fail_event_facets": ["errorMessage"],
+      "jobs_tracked": [
+        "capstone.ingestion",
+        "capstone.bronze",
+        "capstone.silver",
+        "capstone.gold",
+        "capstone.quality"
+      ]
+    },
+    "orchestration": {
+      "technology": "Apache Airflow 2.10.4",
+      "dag_id": "capstone_pipeline",
+      "tasks": [
+        "produce_seed_data",
+        "ingest_from_kafka",
+        "build_bronze",
+        "build_silver",
+        "build_gold",
+        "verify_delta_guarantees",
+        "quality_gate_great_expectations",
+        "rag_pipeline",
+        "pipeline_summary"
+      ],
+      "successful_run": "DagRun state=success (all 9 tasks completed)",
+      "failure_run": "quality_gate FAILED -> rag_pipeline + pipeline_summary skipped (upstream_failed)",
+      "execution_mode": "airflow dags test (sequential, no scheduler)"
+    }
+  },
+  "tests": {
+    "total": 37,
+    "passed": 37,
+    "failed": 0,
+    "suites": {
+      "test_ingestion": 8,
+      "test_lakehouse": 8,
+      "test_rag": 8,
+      "test_quality": 3,
+      "test_lineage": 3,
+      "test_airflow": 6
+    }
+  },
+  "secrets_scan": {
+    "result": "clean",
+    "files_scanned": ["src/", "tests/", "evidence/"],
+    "hardcoded_secrets_found": 0
+  },
+  "environment_limitations": [
+    "Docker not installed - native Kafka used instead",
+    "WSL not installed - Airflow runs via 'dags test' not scheduler",
+    "Airflow on Windows: officially POSIX-only, scheduler requires WSL2/Linux containers"
+  ]
+}
