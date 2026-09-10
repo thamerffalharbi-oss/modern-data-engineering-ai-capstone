@@ -1,0 +1,30 @@
+# --- Ingestion (real Kafka) ---
+confluent-kafka==2.6.1
+pydantic==2.9.2
+
+# --- Lakehouse (real Delta Lake on Spark) ---
+pyspark==3.5.6
+delta-spark==3.3.2
+py4j==0.10.9.7
+
+# --- Delta reader (no JVM needed; used by quality gate + RAG knowledge base) ---
+deltalake==1.6.3
+pyarrow==25.0.1
+
+# --- Data quality (real Great Expectations) ---
+great-expectations==0.18.22
+
+# --- Lineage (real OpenLineage) ---
+openlineage-python==1.24.2
+
+# --- RAG ---
+chromadb==0.5.23
+sentence-transformers==3.3.1
+rank-bm25==0.2.2
+numpy==1.26.4
+
+# --- Tests ---
+pytest==8.3.4
+
+# --- Airflow (install in a SEPARATE venv; conflicts with Spark deps) ---
+# apache-airflow==2.10.4

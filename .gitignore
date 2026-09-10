@@ -1,0 +1,73 @@
+# --- Virtual environments ---
+.venv311/
+.venv_airflow/
+.venv/
+venv/
+
+# --- Airflow runtime ---
+.airflow_home/
+airflow.db
+airflow-webserver.pid
+airflow.cfg
+
+# --- Generated data (not for Git) ---
+data/
+data_test/
+**/bronze/
+**/silver/
+**/gold/
+**/_delta_log/
+
+# --- Evidence (keep small JSON logs, ignore large/binary artifacts) ---
+evidence/**/*.parquet
+evidence/**/*.bin
+evidence/.pytest_cache/
+
+# --- Python caches ---
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- Model caches ---
+.hf_cache/
+.huggingface/
+chroma_db/
+
+# --- Spark runtime / temp ---
+.spark-warehouse/
+spark-warehouse/
+*.jar
+
+# --- IDE ---
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# --- OS ---
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# --- Secrets ---
+.env
+*.pem
+*.key
+*.p12
+
+# --- Large / unnecessary files ---
+*.pptx
+*.ppt
+*.zip
+*.tar.gz
+*.tgz
+*.7z
+infra/kafka.tgz
+
+# --- Logs (keep evidence logs, ignore stray logs) *
+*.log
+!evidence/*.log
+!evidence/**/*.log
