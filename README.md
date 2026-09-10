@@ -464,10 +464,20 @@ Run artifacts are stored under `capstone/evidence/`:
 
 ---
 
-## SDAIA Attribution
+## Training Program Attribution
 
-This capstone is built for the [SDAIA Academy](https://github.com/SDAIAAcademy)
-Modern Data Engineering for AI Systems programme, delivered via Learning Space.
+| Field | Value |
+|-------|-------|
+| **Programme** | Modern Data Engineering for AI Systems |
+| **Institution** | SDAIA Academy |
+| **Delivery** | Delivered via Learning Space |
+| **Trainer** | Mohammed Albeladi |
+| **Cohort/Session Dates** | [TO BE CONFIRMED] |
+| **Academy GitHub** | [https://github.com/SDAIAAcademy](https://github.com/SDAIAAcademy) |
+
+This capstone was completed as the final project for the Modern Data Engineering
+for AI Systems programme at SDAIA Academy, delivered via Learning Space and
+taught by trainer Mohammed Albeladi.
 
 The original lab exercises (day01–day04) are preserved in their respective
 folders; the `capstone/` directory is the unified submission.
