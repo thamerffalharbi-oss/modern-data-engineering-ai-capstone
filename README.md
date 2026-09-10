@@ -36,7 +36,7 @@ not simulations, not Python queues pretending to be Kafka.
 - [Troubleshooting](#troubleshooting)
 - [Evidence](#evidence)
 - [Limitations](#limitations)
-- [SDAIA Attribution](#sdaia-attribution)
+- [Training Program Attribution](#training-program-attribution)
 
 ---
 
